@@ -18,7 +18,6 @@ class BasePage():
     
     def click(self, by_locator, dynamicContent = None, timeout=10):
         """ Performs click on web element whose locator is passed to it"""
-        print (self.generate_locator(by_locator, dynamicContent))
         WebDriverWait(self.driver, timeout, ignored_exceptions=self.ignored_exceptions).until(EC.presence_of_element_located(self.generate_locator(by_locator, dynamicContent))).click()
     
     def enter_text(self, by_locator, text, dynamicContent = None , timeout=10):

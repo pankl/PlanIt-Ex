@@ -8,7 +8,8 @@ Email = A@A.com
 EmailErrorMessage = Email is required
 MessageText = ABC
 MessageErrorMessage = Message is required
-SuccessMessage = Thanks ${Forename}, we appreciate your feedback.
+#Success message is dynamic {Forename} will be replaced in runtime
+SuccessMessage = Thanks {Forename}, we appreciate your feedback.
 
 [Shop]
 #Fill in items in format ItemName = Quantity

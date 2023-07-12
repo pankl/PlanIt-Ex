@@ -1,5 +1,4 @@
 import unittest
-import sys
 from HTMLTestRunner import HTMLTestRunner
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -8,6 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from Pages.HomePage import HomePage
 from Pages.ContactPage import ContactPage
 from Pages.ShopPage import ShopPage
+from Pages.CartPage import CartPage
 from Helpers.Constants import * 
 from Helpers.MyLogger import getmylogger
 
@@ -35,10 +35,10 @@ class TestPlanItJupiterToys(unittest.TestCase):
     def test_verify_validation_errors_on_contact_page(self):
         try:
             self.homePage.clickContactButton()
+            logger.debug('Navigating to Contact page')
             self.contactPage = ContactPage(TestPlanItJupiterToys.driver)
             self.contactPage.clickSubmitButton()
             logger.debug('Asserting correct error message is present for Forname field')
-            
             self.assertEqual(fornameErrorMessage,self.contactPage.getErrorMessage('Forename'),
                             f"Expected: {fornameErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage('Forename')}")
             
@@ -52,29 +52,45 @@ class TestPlanItJupiterToys(unittest.TestCase):
         except:
             self.fail() 
 
-    @unittest.skip("a")
     def test_verify_successful_contact_submission(self):
         try:
             self.homePage.clickContactButton()
+            logger.debug('Navigating to Contact page')
             self.contactPage = ContactPage(TestPlanItJupiterToys.driver)
             self.contactPage.inputForNameText(forename)
             self.contactPage.inputEmailText(email)
             self.contactPage.inputMessageText(message)
             self.contactPage.clickSubmitButton()
             logger.debug('Asserting success message to show on submission of valid form')
+            print('~~~here~~~', successfulMessage)
             self.assertEqual(successfulMessage,self.contactPage.getSuccessMessage(),
                             f"Expected: {successfulMessage} \r\nInstead got: {self.contactPage.getSuccessMessage()}")
         except:
             self.fail() 
-
+    
+    @unittest.skip("a")
     def test_verify_shopping_cart(self):
         try:
             self.homePage.clickShopButton()
+            logger.debug('Navigating to Shop page')
             self.shopPage = ShopPage(TestPlanItJupiterToys.driver)
-            for item in shopItems:
-                self.shopPage.buyItem(item)
-                item = item + (self.shopPage.getItemPrice(item), )
-                print(item, type(item))
+            
+            logger.debug('Adding items to cart')
+            '''Adding items to cart and enriching it with expected price and subtotal'''
+            self.expectedItemsInCart, self.expectedSubTotal = self.addItemsToCart(shopItems)
+                
+            self.homePage.clickCartButton()
+            logger.debug('Navigating to Cart page')
+            self.cartPage = CartPage(TestPlanItJupiterToys.driver)
+            for item in self.expectedItemsInCart:
+                logger.debug(f'Asserting expected values for item {item[0]}')
+                itemPriceInCart, itemSubTotalInCart = self.cartPage.getCartRow(item[0])
+                self.assertEqual(item[2], float(itemPriceInCart))
+                self.assertEqual(item[3], float(itemSubTotalInCart))
+
+            logger.debug('Asserting cart SubTotal')
+            actualSubTotal = float(self.cartPage.getSubTotal().split(":")[1])
+            self.assertEqual(self.expectedSubTotal, actualSubTotal)
                 
         except:
             self.fail()
@@ -91,7 +107,20 @@ class TestPlanItJupiterToys(unittest.TestCase):
     @classmethod    
     def tearDownClass(cls):  
         logger.debug('Running cleanup')
-        cls.driver.close()    
+        cls.driver.close() 
+
+    def addItemsToCart(self, items):
+        self.tappedItems = list()
+        self._expectedSubTotal = 0
+        for item in items:
+            logger.debug(f'Adding to cart and enriching item {item[0]}')
+            self.shopPage.buyItem(item)
+            itemQty = int(item[1])
+            itemPrice = float(self.shopPage.getItemPrice(item).strip('$'))
+            itemSubtotal = itemQty*itemPrice
+            self.tappedItems.append(item + ( itemPrice, itemSubtotal))
+            self._expectedSubTotal += itemSubtotal
+        return self.tappedItems, self._expectedSubTotal   
 
 
 

@@ -29,3 +29,11 @@ class HomePage(BasePage):
         except:
             logger.error(f'Failed to locate shop button, used {HomePageLocators.ShopButtonLocator} locator')
             raise
+        
+    def clickCartButton(self):
+        try:
+            self.click(HomePageLocators.CartButtonLocator)
+            logger.debug("Clicked on cart button")
+        except:
+            logger.error(f'Failed to locate cart button, used {HomePageLocators.CartButtonLocator} locator')
+            raise
