@@ -15,9 +15,17 @@ class HomePage(BasePage):
 
 
     def clickContactButton(self):
-        self.click(HomePageLocators.ContactButtonLocator)
-        logger.debug("Clicked on contact button")
+        try:
+            self.click(HomePageLocators.ContactButtonLocator)
+            logger.debug("Clicked on contact button")
+        except:
+            logger.error(f'Failed to locate contact button, used {HomePageLocators.ContactButtonLocator} locator')
+            raise
 
     def clickShopButton(self):
-        self.click(HomePageLocators.ShopButtonLocator)
-        logger.debug("Clicked on shop button")
+        try:
+            self.click(HomePageLocators.ShopButtonLocator)
+            logger.debug("Clicked on shop button")
+        except:
+            logger.error(f'Failed to locate shop button, used {HomePageLocators.ShopButtonLocator} locator')
+            raise

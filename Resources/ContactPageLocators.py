@@ -6,9 +6,7 @@ class ContactPageLocators():
     EmailInput = (By.ID, "email")
     MessageInput = (By.ID, "message")
 
-    ForeNameErrorMessage = (By.ID, "forename-err")
-    EmailErrorMessage = (By.ID, "email-err")
-    MessageErrorMessage = (By.ID, "message-err")
+    ErrorMessage = (By.ID, "{{dynamicContent}}-err")
 
     SubmitProgressBar = (By.XPATH, "//*[@class='progress progress-info wait']")
 

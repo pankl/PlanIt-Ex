@@ -2,7 +2,6 @@ from Pages.BasePage import BasePage
 from Resources.ContactPageLocators import ContactPageLocators
 from Helpers.Constants import * 
 from Helpers.MyLogger import getmylogger
-import time
 
 logger = getmylogger(__name__)
 
@@ -16,36 +15,39 @@ class ContactPage(BasePage):
         logger.debug("Clicked on submit button")
 
     def inputForNameText(self,text):
-        logger.debug("Typing {} in Forename field".format(text))
-        self.wait_for_element(ContactPageLocators.ForeNameInput)
-        self.click(ContactPageLocators.ForeNameInput)
-        self.enter_text(ContactPageLocators.ForeNameInput,text)
-
-    def getForeNameErrorMessage(self):
-        logger.info("Awaiting error message text for Forname")
-        return self.get_text(ContactPageLocators.ForeNameErrorMessage)
+        self.fillInTextInInputField(text, ContactPageLocators.ForeNameInput)
     
     def inputEmailText(self,text):
-        logger.debug("Typing {} in Email field".format(text))
-        self.wait_for_element(ContactPageLocators.EmailInput)
-        self.click(ContactPageLocators.EmailInput)
-        self.enter_text(ContactPageLocators.EmailInput,text)
-        
-    def getEmailErrorMessage(self):
-        logger.info("Awaiting error message text for Email")
-        return self.get_text(ContactPageLocators.EmailErrorMessage)
+        self.fillInTextInInputField(text, ContactPageLocators.EmailInput)
     
     def inputMessageText(self,text):
-        logger.debug("Typing {} in Message field".format(text))
-        self.wait_for_element(ContactPageLocators.MessageInput)
-        self.click(ContactPageLocators.MessageInput)
-        self.enter_text(ContactPageLocators.MessageInput,text)
+        self.fillInTextInInputField(text, ContactPageLocators.MessageInput)
         
-    def getMessageErrorMessage(self):
-        logger.info("Awaiting error message text for Message")
-        return self.get_text(ContactPageLocators.MessageErrorMessage)
-    
     def getSuccessMessage(self):
-        logger.info("Awaiting success message text for valid submission")
-        self.wait_for_element_to_be_gone(ContactPageLocators.SubmitProgressBar)
-        return self.get_text(ContactPageLocators.SuccessfulSubmissionMessage)
+        try:
+            logger.info("Awaiting success message text for valid submission")
+            self.wait_for_element_to_be_gone(ContactPageLocators.SubmitProgressBar)
+            return self.get_text(ContactPageLocators.SuccessfulSubmissionMessage)
+        except:
+            logger.error(f'Failed to locate success message, used {ContactPageLocators.SuccessfulSubmissionMessage} locator')
+            raise
+
+    
+    def getErrorMessage(self,field):
+        try:
+            logger.info(f"Awaiting error message text for {field}")
+            return self.get_text(ContactPageLocators.ErrorMessage, field.lower())
+        except:
+            logger.error(f'Failed to locate {field}, used {ContactPageLocators.ErrorMessage} locator')
+            raise
+            
+    
+    def fillInTextInInputField(self,text,locator):
+        try:
+            logger.debug(f"Typing {text} in Message field")
+            self.wait_for_element(locator)
+            self.click(locator)
+            self.enter_text(locator,text)
+        except:
+            logger.error(f'Failed to type into text input, used {locator} locator')
+            raise
