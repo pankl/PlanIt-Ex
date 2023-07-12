@@ -2,11 +2,11 @@
 BaseUrl = http://jupiter.cloud.planittesting.com
 
 [ContactForm]
-Forename = LP
+Forename = 
 ForenameErrorMessage = Forename is required
-Email = A@A.com
+Email = 
 EmailErrorMessage = Email is required
-MessageText = ABC
+MessageText = 
 MessageErrorMessage = Message is required
 #Success message is dynamic {Forename} will be replaced in runtime
 SuccessMessage = Thanks {Forename}, we appreciate your feedback.

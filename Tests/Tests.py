@@ -31,7 +31,6 @@ class TestPlanItJupiterToys(unittest.TestCase):
         logger.debug('Running setUp method')
         self.homePage = HomePage(TestPlanItJupiterToys.driver)
 
-    @unittest.skip("a")
     def test_verify_validation_errors_on_contact_page(self):
         try:
             self.homePage.clickContactButton()
@@ -62,13 +61,11 @@ class TestPlanItJupiterToys(unittest.TestCase):
             self.contactPage.inputMessageText(message)
             self.contactPage.clickSubmitButton()
             logger.debug('Asserting success message to show on submission of valid form')
-            print('~~~here~~~', successfulMessage)
             self.assertEqual(successfulMessage,self.contactPage.getSuccessMessage(),
                             f"Expected: {successfulMessage} \r\nInstead got: {self.contactPage.getSuccessMessage()}")
         except:
             self.fail() 
     
-    @unittest.skip("a")
     def test_verify_shopping_cart(self):
         try:
             self.homePage.clickShopButton()
@@ -77,7 +74,7 @@ class TestPlanItJupiterToys(unittest.TestCase):
             
             logger.debug('Adding items to cart')
             '''Adding items to cart and enriching it with expected price and subtotal'''
-            self.expectedItemsInCart, self.expectedSubTotal = self.addItemsToCart(shopItems)
+            self.expectedItemsInCart, self.expectedTotal = self.addItemsToCart(shopItems)
                 
             self.homePage.clickCartButton()
             logger.debug('Navigating to Cart page')
@@ -89,8 +86,8 @@ class TestPlanItJupiterToys(unittest.TestCase):
                 self.assertEqual(item[3], float(itemSubTotalInCart))
 
             logger.debug('Asserting cart SubTotal')
-            actualSubTotal = float(self.cartPage.getSubTotal().split(":")[1])
-            self.assertEqual(self.expectedSubTotal, actualSubTotal)
+            actualTotal = float(self.cartPage.getSubTotal().split(":")[1])
+            self.assertEqual(self.expectedTotal, actualTotal)
                 
         except:
             self.fail()
