@@ -1,0 +1,17 @@
+[Global]
+BaseUrl = http://jupiter.cloud.planittesting.com
+
+[ContactForm]
+Forename = LP
+ForenameErrorMessage = Forename is required
+Email = A@A.com
+EmailErrorMessage = Email is required
+MessageText = ABC
+MessageErrorMessage = Message is required
+SuccessMessage = Thanks ${Forename}, we appreciate your feedback.
+
+[Shop]
+#Fill in items in format ItemName = Quantity
+Stuffed Frog = 2
+Fluffy Bunny = 5
+Valentine Bear = 3
