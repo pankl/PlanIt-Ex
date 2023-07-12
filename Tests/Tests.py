@@ -41,13 +41,13 @@ class TestPlanItJupiterToys(unittest.TestCase):
             self.assertEqual(fornameErrorMessage,self.contactPage.getErrorMessage('Forename'),
                             f"Expected: {fornameErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage('Forename')}")
             
-            logger.debug("Asserting correct error message is present for Email field")
+            logger.debug('Asserting correct error message is present for Email field')
             self.assertEqual(emailErrorMessage,self.contactPage.getErrorMessage('Email'),
-                            f"Expected: {emailErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage('Email')}")
+                            f'Expected: {emailErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage("Email")}')
             
-            logger.debug("Asserting correct error message is present for Message field")
+            logger.debug('Asserting correct error message is present for Message field')
             self.assertEqual(messageErrorMessage,self.contactPage.getErrorMessage('Message'),
-                            f"Expected: {messageErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage('Message')}")
+                            f'Expected: {messageErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage("Message")}')
         except:
             self.fail() 
 
@@ -62,7 +62,7 @@ class TestPlanItJupiterToys(unittest.TestCase):
             self.contactPage.clickSubmitButton()
             logger.debug('Asserting success message to show on submission of valid form')
             self.assertEqual(successfulMessage,self.contactPage.getSuccessMessage(),
-                            f"Expected: {successfulMessage} \r\nInstead got: {self.contactPage.getSuccessMessage()}")
+                            f'Expected: {successfulMessage} \r\nInstead got: {self.contactPage.getSuccessMessage()}')
         except:
             self.fail() 
     

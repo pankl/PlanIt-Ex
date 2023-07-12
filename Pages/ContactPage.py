@@ -12,7 +12,7 @@ class ContactPage(BasePage):
 
     def clickSubmitButton(self):
         self.click(ContactPageLocators.SubmitButton)
-        logger.debug("Clicked on submit button")
+        logger.debug('Clicked on submit button')
 
     def inputForNameText(self,text):
         self.fillInTextInInputField(text, ContactPageLocators.ForeNameInput)
@@ -25,7 +25,7 @@ class ContactPage(BasePage):
         
     def getSuccessMessage(self):
         try:
-            logger.info("Awaiting success message text for valid submission")
+            logger.info('Awaiting success message text for valid submission')
             self.wait_for_element_to_be_gone(ContactPageLocators.SubmitProgressBar)
             return self.get_text(ContactPageLocators.SuccessfulSubmissionMessage)
         except:
@@ -35,7 +35,7 @@ class ContactPage(BasePage):
     
     def getErrorMessage(self,field):
         try:
-            logger.info(f"Awaiting error message text for {field}")
+            logger.info(f'Awaiting error message text for {field}')
             return self.get_text(ContactPageLocators.ErrorMessage, field.lower())
         except:
             logger.error(f'Failed to locate {field}, used {ContactPageLocators.ErrorMessage} locator')
@@ -44,7 +44,7 @@ class ContactPage(BasePage):
     
     def fillInTextInInputField(self,text,locator):
         try:
-            logger.debug(f"Typing {text} in Message field")
+            logger.debug(f'Typing {text} in Message field')
             self.wait_for_element(locator)
             self.click(locator)
             self.enter_text(locator,text)
