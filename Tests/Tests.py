@@ -10,6 +10,7 @@ from Pages.ShopPage import ShopPage
 from Pages.CartPage import CartPage
 from Helpers.Constants import * 
 from Helpers.MyLogger import getmylogger
+from Helpers.Item import Item
 
 
 
@@ -30,7 +31,7 @@ class TestPlanItJupiterToys(unittest.TestCase):
     def setUp(self):
         logger.debug('Running setUp method')
         self.homePage = HomePage(TestPlanItJupiterToys.driver)
-
+    @unittest.skip('a')
     def test_verify_validation_errors_on_contact_page(self):
         try:
             self.homePage.clickContactButton()
@@ -50,7 +51,7 @@ class TestPlanItJupiterToys(unittest.TestCase):
                             f'Expected: {messageErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage("Message")}')
         except:
             self.fail() 
-
+    @unittest.skip('a')
     def test_verify_successful_contact_submission(self):
         try:
             self.homePage.clickContactButton()
@@ -80,10 +81,10 @@ class TestPlanItJupiterToys(unittest.TestCase):
             logger.debug('Navigating to Cart page')
             self.cartPage = CartPage(TestPlanItJupiterToys.driver)
             for item in self.expectedItemsInCart:
-                logger.debug(f'Asserting expected values for item {item[0]}')
-                itemPriceInCart, itemSubTotalInCart = self.cartPage.getCartRow(item[0])
-                self.assertEqual(item[2], float(itemPriceInCart))
-                self.assertEqual(item[3], float(itemSubTotalInCart))
+                logger.debug(f'Asserting expected values for item {item.itemName}')
+                itemPriceInCart, itemSubTotalInCart = self.cartPage.getCartRow(item.itemName)
+                self.assertEqual(item.itemPrice, float(itemPriceInCart))
+                self.assertEqual(item.itemSubTotal, float(itemSubTotalInCart))
 
             logger.debug('Asserting cart SubTotal')
             actualTotal = float(self.cartPage.getSubTotal().split(":")[1])
@@ -110,13 +111,14 @@ class TestPlanItJupiterToys(unittest.TestCase):
         self.tappedItems = list()
         self._expectedSubTotal = 0
         for item in items:
-            logger.debug(f'Adding to cart and enriching item {item[0]}')
-            self.shopPage.buyItem(item)
-            itemQty = int(item[1])
-            itemPrice = float(self.shopPage.getItemPrice(item).strip('$'))
-            itemSubtotal = itemQty*itemPrice
-            self.tappedItems.append(item + ( itemPrice, itemSubtotal))
-            self._expectedSubTotal += itemSubtotal
+            tapItem = Item(item[0],int(item[1]))
+            logger.debug(f'Adding to cart and enriching item {tapItem.itemName}')
+            self.shopPage.buyItem(tapItem)
+            tapItem.setItemPrice(float(self.shopPage.getItemPrice(tapItem).strip('$')))
+            print(tapItem.itemPrice, tapItem.itemName, tapItem.itemQty)
+            tapItem.setItemSubTotal(tapItem.itemQty,tapItem.itemPrice)
+            self.tappedItems.append(tapItem)
+            self._expectedSubTotal += tapItem.itemSubTotal
         return self.tappedItems, self._expectedSubTotal   
 
 

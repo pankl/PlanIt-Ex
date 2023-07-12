@@ -10,16 +10,16 @@ class ShopPage(BasePage):
         super().__init__(driver)
 
     def buyItem(self,item):
-        (itemName, qty) = item
-        for i in range(int(qty)):
-            self._clickBuyButton(itemName)
+        
+        for i in range(item.itemQty):
+            self._clickBuyButton(item.itemName)
     
     def getItemPrice(self, item):
         try:
-            logger.debug(f'Awaiting to get item price for {item[0]}')
-            return self.get_text(ShopPageLocators.ItemPriceText, item[0])
+            logger.debug(f'Awaiting to get item price for {item.itemName}')
+            return self.get_text(ShopPageLocators.ItemPriceText, item.itemName)
         except:
-            logger.error(f'Failed to locate item {item[0]}, used {ShopPageLocators.ItemPriceText} locator')
+            logger.error(f'Failed to locate item {item.itemName}, used {ShopPageLocators.ItemPriceText} locator')
             raise
 
     def _clickBuyButton(self,itemName):
