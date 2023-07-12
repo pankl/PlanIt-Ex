@@ -31,7 +31,7 @@ class TestPlanItJupiterToys(unittest.TestCase):
     def setUp(self):
         logger.debug('Running setUp method')
         self.homePage = HomePage(TestPlanItJupiterToys.driver)
-    @unittest.skip('a')
+
     def test_verify_validation_errors_on_contact_page(self):
         try:
             self.homePage.clickContactButton()
@@ -51,7 +51,7 @@ class TestPlanItJupiterToys(unittest.TestCase):
                             f'Expected: {messageErrorMessage} \r\nInstead got: {self.contactPage.getErrorMessage("Message")}')
         except:
             self.fail() 
-    @unittest.skip('a')
+
     def test_verify_successful_contact_submission(self):
         try:
             self.homePage.clickContactButton()
